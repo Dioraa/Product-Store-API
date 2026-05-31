@@ -1,0 +1,14 @@
+const ProductCard = ({ name, price, onAddToCart, isInCart }) => {
+  return (
+    <div className="product-card">
+      <h3>{name}</h3>
+      <p>{price}€</p>
+
+      <button onClick={onAddToCart} disabled={isInCart}>
+        {isInCart ? "Added" : "Add to Cart"}
+      </button>
+    </div>
+  );
+};
+
+export default ProductCard;
