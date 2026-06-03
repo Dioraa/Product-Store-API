@@ -1,21 +1,41 @@
-import { useState } from "react";
 import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
 import Cart from "./components/Cart";
+import { useState, useEffect } from "react";
 import "./App.css";
 
-const products = [
-  { id: 1, name: "Laptop", price: 800 },
-  { id: 2, name: "Mouse", price: 20 },
-  { id: 3, name: "Keyboard", price: 50 },
-  { id: 4, name: "Headphones", price: 120 },
-];
+const title = "Product Store";
+const API_URL = "https://fakestoreapi.com/products";
 
-export default function App() {
+function App() {
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const getProducts = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        setError("Something went wrong", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const handleAddToCart = (product) => {
-    if (!cart.find((item) => item.id === product.id)) {
+    const exists = cart.some((item) => item.id === product.id);
+
+    if (!exists) {
       setCart([...cart, product]);
     }
   };
@@ -24,25 +44,46 @@ export default function App() {
     setCart(cart.filter((item) => item.id !== id));
   };
 
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="app">
-      <Header title="Product Store" subtitle="React Practice App" />
+    <div>
+      <Header title={title} subtitle="Simple Product Store" />
 
-      <div className="products-list">
-        {products.map((p) => (
-          <ProductCard
-            key={p.id}
-            name={p.name}
-            price={p.price}
-            onAddToCart={() => handleAddToCart(p)}
-            isInCart={cart.some((item) => item.id === p.id)}
-          />
-        ))}
+      {loading && <p>Loading products...</p>}
+      {error && <p>{error}</p>}
+
+      <div className="layout">
+        <div className="products">
+          {products.map((product) => {
+            const isInCart = cart.some((item) => item.id === product.id);
+
+            return (
+              <ProductCard
+                key={product.id}
+                title={product.title}
+                price={product.price}
+                image={product.image}
+                onAddToCart={() => handleAddToCart(product)}
+                isInCart={isInCart}
+              />
+            );
+          })}
+        </div>
+
+        <Cart
+          cart={cart}
+          onRemoveFromCart={handleRemoveFromCart}
+          onClearCart={handleClearCart}
+          total={total}
+        />
       </div>
-
-      <Cart cart={cart} onRemoveFromCart={handleRemoveFromCart} total={total} />
     </div>
   );
 }
+
+export default App;

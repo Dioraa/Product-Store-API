@@ -1,10 +1,10 @@
-const Header = ({ title, subtitle }) => {
+function Header({ title, subtitle }) {
   return (
-    <div className="header">
+    <header className="header">
       <h1>{title}</h1>
       <p>{subtitle}</p>
-    </div>
+    </header>
   );
-};
+}
 
 export default Header;

@@ -1,4 +1,4 @@
-const Cart = ({ cart, onRemoveFromCart, total }) => {
+function Cart({ cart, onRemoveFromCart, onClearCart, total }) {
   return (
     <div className="cart">
       <h2>Cart</h2>
@@ -6,20 +6,25 @@ const Cart = ({ cart, onRemoveFromCart, total }) => {
       {cart.length === 0 ? (
         <p>Cart is empty</p>
       ) : (
-        cart.map((item) => (
-          <div className="cart-item" key={item.id}>
-            <span>
-              {item.name} - {item.price}€
-            </span>
+        <>
+          {cart.map((item) => (
+            <div key={item.id} className="cart-item">
+              <p>{item.title}</p>
+              <p>{item.price}€</p>
 
-            <button onClick={() => onRemoveFromCart(item.id)}>Remove</button>
-          </div>
-        ))
+              <button onClick={() => onRemoveFromCart(item.id)}>Remove</button>
+            </div>
+          ))}
+
+          <h3>Total: {total}€</h3>
+
+          <button className="clear-btn" onClick={onClearCart}>
+            Clear Cart
+          </button>
+        </>
       )}
-
-      <h3>Total: {total}€</h3>
     </div>
   );
-};
+}
 
 export default Cart;

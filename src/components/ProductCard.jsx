@@ -1,7 +1,9 @@
-const ProductCard = ({ name, price, onAddToCart, isInCart }) => {
+function ProductCard({ title, price, image, onAddToCart, isInCart }) {
   return (
-    <div className="product-card">
-      <h3>{name}</h3>
+    <div className="card">
+      <img src={image} alt={title} className="product-img" />
+
+      <h3>{title}</h3>
       <p>{price}€</p>
 
       <button onClick={onAddToCart} disabled={isInCart}>
@@ -9,6 +11,6 @@ const ProductCard = ({ name, price, onAddToCart, isInCart }) => {
       </button>
     </div>
   );
-};
+}
 
 export default ProductCard;
