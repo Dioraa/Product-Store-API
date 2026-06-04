@@ -75,12 +75,21 @@ function App() {
           })}
         </div>
 
-        <Cart
+        {cart.length > 0 && (
+          <Cart
+            cart={cart}
+            onRemoveFromCart={handleRemoveFromCart}
+            onClearCart={handleClearCart}
+            total={total}
+          />
+        )}
+
+        {/* <Cart
           cart={cart}
           onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
           total={total}
-        />
+        /> */}
       </div>
     </div>
   );
